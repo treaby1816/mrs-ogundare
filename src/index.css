@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-900: #064e3b; /* emerald-900 */
+  --color-primary-800: #065f46; /* emerald-800 */
+  --color-accent-gold: #d97706; /* amber-600 */
+  --color-accent-champagne: #fde68a; /* amber-200 */
+  --color-bg-white: #ffffff;
+  --color-bg-pearl: #f8fafc; /* slate-50 */
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900;
+  }
+}
