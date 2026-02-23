@@ -87,9 +87,9 @@ function App() {
           {/* Ondo State Logo - Top Left */}
           <motion.img
             variants={fadeIn}
-            src="/ondo-logo.jpg"
+            src="/ondo-logo.png"
             alt="Ondo State Logo"
-            className="absolute -top-4 md:-top-8 left-0 md:-left-12 w-20 md:w-28 opacity-90 drop-shadow-lg z-20 mix-blend-multiply"
+            className="absolute -top-4 md:-top-8 left-0 md:-left-12 w-20 md:w-28 drop-shadow-lg z-20"
           />
 
           <motion.div variants={fadeIn} className="mb-8 relative">
