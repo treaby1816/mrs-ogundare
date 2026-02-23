@@ -129,15 +129,15 @@ function App() {
             </div>
           </motion.div>
 
-          <motion.p variants={fadeIn} className="uppercase tracking-[0.2em] text-sm md:text-base mb-4 font-medium bg-gradient-to-r from-teal-300 via-emerald-200 to-teal-300 bg-clip-text text-transparent animate-text-gradient">
+          <motion.p variants={fadeIn} className="text-amber-200/80 uppercase tracking-[0.2em] text-sm md:text-base mb-4 font-medium">
             Official Citation Of
           </motion.p>
 
-          <motion.h1 variants={fadeIn} className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 leading-tight drop-shadow-lg [text-wrap:balance] bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-amber-300 bg-clip-text text-transparent animate-text-gradient">
-            Mrs. Temitayo Olufunke Ogundare
+          <motion.h1 variants={fadeIn} className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 leading-tight text-white drop-shadow-lg [text-wrap:balance]">
+            Mrs. Temitayo Olufunke <span className="text-amber-400">Ogundare</span>
           </motion.h1>
 
-          <motion.h2 variants={fadeIn} className="text-lg md:text-2xl font-light tracking-wide mb-8 max-w-2xl border-t border-b border-emerald-800/50 py-4 bg-gradient-to-r from-sky-300 via-indigo-300 to-sky-300 bg-clip-text text-transparent animate-text-gradient">
+          <motion.h2 variants={fadeIn} className="text-lg md:text-2xl font-light tracking-wide text-amber-100 mb-8 max-w-2xl border-t border-b border-emerald-800/50 py-4">
             Permanent Secretary, Ondo State Civil Service
           </motion.h2>
 
