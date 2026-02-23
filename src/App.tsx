@@ -557,7 +557,7 @@ function App() {
           <motion.div variants={fadeIn} className="bg-white p-8 md:p-12 rounded-3xl shadow-xl shadow-emerald-900/5 border border-emerald-100 relative">
             <div className="text-6xl text-amber-200 absolute top-4 left-6 font-serif opacity-50">"</div>
             <p className="text-lg md:text-xl text-slate-700 leading-relaxed font-light italic relative z-10 pt-4">
-              A heartfelt appreciation to all well-wishers, family, friends, colleagues, senior colleagues, and everyone who has taken the time out of their busy schedules to be part of this inauguration party and reception. Your presence, support, and prayers mean the world to me. For those not explicitly mentioned but who have shared in the joy of this milestone, I am profoundly grateful. Thank you all for coming to rejoice with me on this special occasion!
+              My profound gratitude goes to the Ondo State Government and His Excellency, Governor Lucky Orimisan Aiyedatiwa, for the privilege and opportunity to serve in this esteemed capacity. A heartfelt appreciation to all well-wishers, family, friends, colleagues, senior colleagues, and everyone who has taken the time out of their busy schedules to be part of this inauguration party and reception. Your presence, support, and prayers mean the world to me. For those not explicitly mentioned but who have shared in the joy of this milestone, I am profoundly grateful. Thank you all for coming to rejoice with me on this special occasion!
             </p>
             <div className="mt-8 text-right relative z-10">
               <p className="font-semibold text-emerald-900 text-xl font-serif">
