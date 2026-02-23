@@ -52,11 +52,36 @@ function App() {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
-        audioRef.current.play();
+        audioRef.current.play().catch(e => console.error("Audio playback failed:", e));
       }
       setIsPlaying(!isPlaying);
     }
   };
+
+  // Autoplay workaround: browsers block autoplay unless the user interacts with the page.
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      if (audioRef.current && !isPlaying) {
+        audioRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(e => console.log("Autoplay prevented:", e));
+      }
+      // Remove listeners once interaction occurs to prevent multiple play calls
+      window.removeEventListener('scroll', handleFirstInteraction);
+      window.removeEventListener('click', handleFirstInteraction);
+      window.removeEventListener('keydown', handleFirstInteraction);
+    };
+
+    window.addEventListener('scroll', handleFirstInteraction, { passive: true });
+    window.addEventListener('click', handleFirstInteraction, { passive: true });
+    window.addEventListener('keydown', handleFirstInteraction, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleFirstInteraction);
+      window.removeEventListener('click', handleFirstInteraction);
+      window.removeEventListener('keydown', handleFirstInteraction);
+    };
+  }, [isPlaying]);
 
   useEffect(() => {
     const handleScroll = () => {
