@@ -1,12 +1,13 @@
-import { motion } from 'framer-motion';
-import { Award, Briefcase, GraduationCap, Calendar, ChevronDown } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { motion, Variants } from 'framer-motion';
+import { Award, Briefcase, GraduationCap, Calendar, ChevronDown, Download, ArrowUp, ArrowDown, Play, Music, Heart, MessageCircle } from 'lucide-react';
 
-const fadeIn = {
+const fadeIn: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
 };
 
-const staggerContainer = {
+const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -17,10 +18,64 @@ const staggerContainer = {
 };
 
 function App() {
+  const [showScroll, setShowScroll] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  // Guestbook State
+  const [messages, setMessages] = useState<Array<{ name: string; role: string; text: string; date: string }>>([]);
+  const [gbName, setGbName] = useState("");
+  const [gbRole, setGbRole] = useState("");
+  const [gbMessage, setGbMessage] = useState("");
+  const [visibleMessages, setVisibleMessages] = useState(3);
+
+  const handleGuestbookSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!gbName.trim() || !gbMessage.trim()) return;
+
+    const newMsg = {
+      name: gbName,
+      role: gbRole || "Well-Wisher",
+      text: gbMessage,
+      date: new Date().toLocaleDateString()
+    };
+
+    setMessages([newMsg, ...messages]);
+    setGbName("");
+    setGbRole("");
+    setGbMessage("");
+  };
+
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScroll(true);
+      } else {
+        setShowScroll(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+  const scrollToBottom = () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans selection:bg-emerald-900 selection:text-white">
       {/* HERO SECTION */}
-      <section className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden bg-emerald-900 text-white px-6 py-20">
+      <section className="relative min-h-[75vh] print:min-h-0 flex flex-col items-center justify-center overflow-hidden bg-emerald-900 text-white px-6 py-16 print:py-8">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-200 via-emerald-900 to-emerald-950"></div>
 
         <motion.div
@@ -48,18 +103,27 @@ function App() {
             Mrs. Temitayo Olufunke <span className="text-amber-400">Ogundare</span>
           </motion.h1>
 
-          <motion.h2 variants={fadeIn} className="text-lg md:text-2xl font-light tracking-wide text-amber-100 mb-12 max-w-2xl border-t border-b border-emerald-800/50 py-4">
+          <motion.h2 variants={fadeIn} className="text-lg md:text-2xl font-light tracking-wide text-amber-100 mb-8 max-w-2xl border-t border-b border-emerald-800/50 py-4">
             Permanent Secretary, Ondo State Civil Service
           </motion.h2>
 
-          <motion.div variants={fadeIn} className="animate-bounce mt-8 text-amber-400/50 absolute bottom-10">
+          <motion.div variants={fadeIn} className="flex gap-4 mb-4 print:hidden">
+            <button
+              onClick={() => window.print()}
+              className="bg-amber-500 hover:bg-amber-400 text-emerald-950 px-6 py-3 rounded-full font-bold transition-colors shadow-lg shadow-amber-500/20 flex items-center gap-2 text-sm md:text-base"
+            >
+              <Download size={20} /> Download Citation (PDF)
+            </button>
+          </motion.div>
+
+          <motion.div variants={fadeIn} className="animate-bounce mt-8 text-amber-400/50 absolute bottom-6 print:hidden">
             <ChevronDown size={32} strokeWidth={1.5} />
           </motion.div>
         </motion.div>
       </section>
 
       {/* PERSONAL PROFILE */}
-      <section className="py-24 px-6 md:px-12 bg-white relative">
+      <section className="py-24 print:py-8 px-6 md:px-12 bg-white relative">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-200 to-transparent opacity-50"></div>
         <motion.div
           className="max-w-4xl mx-auto"
@@ -85,7 +149,7 @@ function App() {
       </section>
 
       {/* ACADEMIC PROWESS */}
-      <section className="py-24 px-6 md:px-12 bg-slate-50 relative overflow-hidden">
+      <section className="py-24 print:py-8 px-6 md:px-12 bg-slate-50 relative overflow-hidden">
         {/* Decorative Background Elements */}
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
 
@@ -133,7 +197,7 @@ function App() {
       </section>
 
       {/* ILLUSTRIOUS CAREER & SERVICE */}
-      <section className="py-24 px-6 md:px-12 bg-white relative">
+      <section className="py-24 print:py-8 px-6 md:px-12 bg-white relative">
         <motion.div
           className="max-w-6xl mx-auto"
           initial="hidden"
@@ -223,7 +287,7 @@ function App() {
       </section>
 
       {/* PROFESSIONAL DEVELOPMENT & TRAININGS */}
-      <section className="py-24 px-6 md:px-12 bg-slate-900 text-slate-50 relative overflow-hidden">
+      <section className="py-24 print:py-8 px-6 md:px-12 bg-slate-900 text-slate-50 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCI+CjxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjIiIGZpbGw9IiMzNGQzOTkiIGZpbGwtb3BhY2l0eT0iMC4xNSIvPgo8L3N2Zz4=')] opacity-30"></div>
         <motion.div
           className="max-w-6xl mx-auto relative z-10"
@@ -262,6 +326,183 @@ function App() {
         </motion.div>
       </section>
 
+      {/* CELEBRANT & FAMILY PHOTO GALLERY */}
+      <section className="py-24 print:hidden px-6 md:px-12 bg-white relative overflow-hidden">
+        <motion.div
+          className="max-w-7xl mx-auto"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.div variants={fadeIn} className="text-center mb-16 relative z-10">
+            <span className="text-amber-600 font-semibold tracking-widest uppercase text-sm mb-2 block">Cherished Memories</span>
+            <h3 className="text-3xl md:text-5xl font-serif font-bold text-emerald-900 mb-6">Celebrant & Family</h3>
+            <p className="max-w-2xl mx-auto text-lg text-slate-600 font-light">
+              A collection of beautiful moments shared with loved ones.
+            </p>
+          </motion.div>
+
+          {/* Marquee Container */}
+          <motion.div variants={fadeIn} className="relative w-full max-w-full overflow-hidden flex bg-slate-50 py-12 rounded-[3rem] border border-slate-100 shadow-inner">
+            {/* Fade Edges for the Marquee */}
+            <div className="absolute left-0 top-0 w-16 md:w-32 h-full bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute right-0 top-0 w-16 md:w-32 h-full bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none"></div>
+
+            <div className="flex w-[200%] animate-scroll gap-6 px-3">
+              {/* Duplicate the array to create the infinite loop effect seamlessly. 
+                  (6 items x 2 = 12 items scrolling continuously) */}
+              {[1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6].map((item, idx) => (
+                <div key={idx} className="w-64 md:w-80 shrink-0 aspect-[4/5] bg-white rounded-3xl border border-slate-200 flex flex-col items-center justify-center p-6 text-center group hover:bg-emerald-50 hover:border-emerald-300 transition-all cursor-pointer overflow-hidden relative shadow-md hover:shadow-xl hover:-translate-y-2">
+                  <div className="absolute inset-0 bg-emerald-900/0 group-hover:bg-emerald-900/5 transition-colors z-0"></div>
+                  <Heart className="w-12 h-12 text-emerald-300 mb-4 group-hover:text-amber-400 group-hover:scale-110 transition-transform duration-500 relative z-10" />
+                  <p className="text-emerald-800/80 font-bold font-serif text-lg relative z-10">Photo {item}</p>
+                  <p className="text-sm text-slate-500 mt-3 relative z-10 leading-relaxed px-4 opacity-70 group-hover:opacity-100 transition-opacity">Placeholder for celebrant and family photo</p>
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-300 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"></div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* DIGITAL GUESTBOOK */}
+      <section className="py-24 print:hidden px-6 md:px-12 bg-slate-50 relative overflow-hidden">
+        <div className="absolute -left-40 top-20 w-80 h-80 bg-amber-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+        <motion.div
+          className="max-w-5xl mx-auto relative z-10"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.div variants={fadeIn} className="text-center mb-16">
+            <span className="text-amber-600 font-semibold tracking-widest uppercase text-sm mb-2 block">Messages of Joy</span>
+            <h3 className="text-3xl md:text-5xl font-serif font-bold text-emerald-900 mb-6">Digital Guestbook</h3>
+            <p className="max-w-2xl mx-auto text-lg text-slate-600 font-light">
+              Leave a congratulatory message or read well-wishes from friends and family.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            <motion.div variants={fadeIn} className="lg:col-span-1 bg-white p-8 rounded-3xl shadow-lg shadow-emerald-900/5 border border-emerald-100 flex flex-col justify-center h-fit sticky top-8">
+              <MessageCircle className="w-12 h-12 text-amber-500 mb-6" />
+              <h4 className="text-2xl font-serif font-bold text-emerald-900 mb-4">Sign the Guestbook</h4>
+              <form className="space-y-4" onSubmit={handleGuestbookSubmit}>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Your Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={gbName}
+                    onChange={(e) => setGbName(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all font-light"
+                    placeholder="E.g. Dr. Olayinka"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Your Title / Relationship</label>
+                  <input
+                    type="text"
+                    value={gbRole}
+                    onChange={(e) => setGbRole(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all font-light"
+                    placeholder="E.g. Colleague, Family"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Your Message *</label>
+                  <textarea
+                    rows={4}
+                    required
+                    value={gbMessage}
+                    onChange={(e) => setGbMessage(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all resize-none font-light"
+                    placeholder="Write your wishes here..."
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-emerald-900 hover:bg-emerald-800 text-amber-200 hover:text-white font-bold py-3.5 rounded-xl transition-colors shadow-lg shadow-emerald-900/20 mt-2 disabled:opacity-50"
+                  disabled={!gbName.trim() || !gbMessage.trim()}
+                >
+                  Submit Message
+                </button>
+              </form>
+            </motion.div>
+
+            <motion.div variants={fadeIn} className="lg:col-span-2 space-y-6">
+              {messages.length === 0 ? (
+                <div className="bg-white p-12 rounded-3xl border-2 border-dashed border-emerald-200 text-center flex flex-col items-center justify-center h-full min-h-[300px]">
+                  <MessageCircle className="w-16 h-16 text-emerald-100 mb-4" />
+                  <h4 className="text-xl font-serif text-emerald-900 mb-2">No messages yet</h4>
+                  <p className="text-slate-500 font-light max-w-sm">Be the first to sign the guestbook and leave a heartfelt message for Mrs. Ogundare!</p>
+                </div>
+              ) : (
+                <>
+                  {messages.slice(0, visibleMessages).map((msg, idx) => (
+                    <div key={idx} className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 relative group hover:border-emerald-200 hover:shadow-md transition-all">
+                      <div className="absolute top-0 right-0 p-4 text-emerald-50">
+                        <MessageCircle size={40} className="opacity-50 group-hover:text-emerald-100 transition-colors" />
+                      </div>
+                      <div className="absolute left-0 top-8 w-1 h-12 bg-emerald-200 rounded-r-md group-hover:bg-amber-400 transition-colors"></div>
+                      <p className="text-slate-700 font-light text-lg mb-6 leading-relaxed relative z-10">"{msg.text}"</p>
+                      <div className="flex justify-between items-center text-sm border-t border-slate-100 pt-4 relative z-10 flex-wrap gap-2">
+                        <span className="font-bold text-emerald-900 text-base">{msg.name}</span>
+                        <div className="flex gap-2 items-center">
+                          <span className="text-slate-400 text-xs">{msg.date}</span>
+                          <span className="text-amber-700 bg-amber-100/50 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase">{msg.role}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  {messages.length > visibleMessages && (
+                    <button
+                      onClick={() => setVisibleMessages(prev => prev + 3)}
+                      className="w-full py-5 text-emerald-700 font-semibold hover:text-emerald-900 transition-colors border-2 border-dashed border-emerald-200 rounded-3xl hover:bg-emerald-50/80 bg-white shadow-sm flex items-center justify-center gap-2"
+                    >
+                      <ArrowDown size={18} /> Load More Messages ({messages.length - visibleMessages} remaining)
+                    </button>
+                  )}
+                </>
+              )}
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* VOTE OF THANKS */}
+      <section className="py-24 print:hidden px-6 md:px-12 bg-emerald-50 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-300 to-transparent opacity-50"></div>
+        <motion.div
+          className="max-w-4xl mx-auto text-center relative z-10"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.div variants={fadeIn} className="mb-10">
+            <span className="text-amber-600 font-semibold tracking-widest uppercase text-sm mb-2 block">Appreciation</span>
+            <h3 className="text-3xl md:text-5xl font-serif font-bold text-emerald-900 mb-6">Vote of Thanks</h3>
+            <div className="w-24 h-1 bg-amber-500 mx-auto rounded-full"></div>
+          </motion.div>
+
+          <motion.div variants={fadeIn} className="bg-white p-8 md:p-12 rounded-3xl shadow-xl shadow-emerald-900/5 border border-emerald-100 relative">
+            <div className="text-6xl text-amber-200 absolute top-4 left-6 font-serif opacity-50">"</div>
+            <p className="text-lg md:text-xl text-slate-700 leading-relaxed font-light italic relative z-10 pt-4">
+              A heartfelt appreciation to all well-wishers, family, friends, colleagues, senior colleagues, and everyone who has taken the time out of their busy schedules to be part of this inauguration party and reception. Your presence, support, and prayers mean the world to me. For those not explicitly mentioned but who have shared in the joy of this milestone, I am profoundly grateful. Thank you all for coming to rejoice with me on this special occasion!
+            </p>
+            <div className="mt-8 text-right relative z-10">
+              <p className="font-semibold text-emerald-900 text-xl font-serif">
+                — Mrs. Temitayo Olufunke Ogundare
+              </p>
+            </div>
+            <div className="text-6xl text-amber-200 absolute bottom-0 right-6 font-serif opacity-50 leading-none rotate-180">"</div>
+          </motion.div>
+        </motion.div>
+      </section>
+
       {/* FOOTER */}
       <footer className="bg-emerald-950 text-emerald-50 py-12 px-6 text-center border-t-4 border-amber-600">
         <div className="max-w-4xl mx-auto flex flex-col items-center">
@@ -273,6 +514,50 @@ function App() {
           </p>
         </div>
       </footer>
+
+      {/* FLOATING NAVIGATION & CONTROLS */}
+      <div className={`fixed right-6 bottom-6 flex flex-col gap-3 z-50 transition-all duration-300 print:hidden ${showScroll ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
+        <button
+          onClick={scrollToTop}
+          className="bg-emerald-900 text-amber-400 p-3 rounded-full shadow-lg hover:bg-emerald-800 hover:text-amber-300 transition-colors border border-emerald-800/50 flex justify-center items-center backdrop-blur-sm"
+          aria-label="Scroll to top"
+        >
+          <ArrowUp size={24} />
+        </button>
+        <button
+          onClick={scrollToBottom}
+          className="bg-emerald-900 text-amber-400 p-3 rounded-full shadow-lg hover:bg-emerald-800 hover:text-amber-300 transition-colors border border-emerald-800/50 flex justify-center items-center backdrop-blur-sm"
+          aria-label="Scroll to bottom"
+        >
+          <ArrowDown size={24} />
+        </button>
+      </div>
+
+      {/* FLOATING AUDIO CONTROL */}
+      <div className="fixed left-6 bottom-6 z-50 print:hidden">
+        <button
+          onClick={toggleAudio}
+          className={`p-4 rounded-full flex justify-center items-center transition-all duration-500 border-2 overflow-hidden relative group ${isPlaying ? 'bg-amber-500 text-emerald-950 border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.5)]' : 'bg-emerald-900 text-amber-400 border-emerald-800 shadow-xl hover:bg-emerald-800'}`}
+          aria-label="Toggle Background Music"
+        >
+          <div className="relative z-10 flex items-center justify-center">
+            {isPlaying ? (
+              <Music size={24} className="animate-pulse" />
+            ) : (
+              <Play size={24} className="ml-1" />
+            )}
+          </div>
+          {/* Ripple effect when playing */}
+          {isPlaying && (
+            <div className="absolute inset-0 rounded-full border-2 border-emerald-900/20 animate-ping"></div>
+          )}
+        </button>
+      </div>
+
+      {/* HIDDEN AUDIO ELEMENT */}
+      <audio ref={audioRef} loop preload="auto">
+        <source src="/background-audio.mp3" type="audio/mpeg" />
+      </audio>
     </div>
   );
 }

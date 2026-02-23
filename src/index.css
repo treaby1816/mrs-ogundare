@@ -1,16 +1,54 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-900: #064e3b; /* emerald-900 */
-  --color-primary-800: #065f46; /* emerald-800 */
-  --color-accent-gold: #d97706; /* amber-600 */
-  --color-accent-champagne: #fde68a; /* amber-200 */
+  --color-primary-900: #064e3b;
+  /* emerald-900 */
+  --color-primary-800: #065f46;
+  /* emerald-800 */
+  --color-accent-gold: #d97706;
+  /* amber-600 */
+  --color-accent-champagne: #fde68a;
+  /* amber-200 */
   --color-bg-white: #ffffff;
-  --color-bg-pearl: #f8fafc; /* slate-50 */
+  --color-bg-pearl: #f8fafc;
+  /* slate-50 */
 }
 
 @layer base {
   body {
     @apply bg-slate-50 text-slate-900;
   }
+}
+
+@media print {
+
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  @page {
+    margin: 0.5cm;
+  }
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
 }
