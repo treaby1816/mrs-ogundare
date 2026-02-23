@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, Variants } from 'framer-motion';
-import { Award, Briefcase, GraduationCap, Calendar, ChevronDown, Download, ArrowUp, ArrowDown, Play, Music, Heart, MessageCircle } from 'lucide-react';
+import { Award, Briefcase, GraduationCap, Calendar, ChevronDown, Download, ArrowUp, ArrowDown, Play, Music, Heart, MessageCircle, Trash2, Edit2, X, Check } from 'lucide-react';
 import { Footer } from './components/Footer';
 
 const fadeIn: Variants = {
@@ -24,27 +24,52 @@ function App() {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // Guestbook State
-  const [messages, setMessages] = useState<Array<{ name: string; role: string; text: string; date: string }>>([]);
+  const [messages, setMessages] = useState<Array<{ id: string; name: string; role: string; text: string; date: string; isMine?: boolean }>>([]);
   const [gbName, setGbName] = useState("");
   const [gbRole, setGbRole] = useState("");
   const [gbMessage, setGbMessage] = useState("");
   const [visibleMessages, setVisibleMessages] = useState(3);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
 
   const handleGuestbookSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!gbName.trim() || !gbMessage.trim()) return;
 
     const newMsg = {
+      id: Date.now().toString(),
       name: gbName,
       role: gbRole || "Well-Wisher",
       text: gbMessage,
-      date: new Date().toLocaleDateString()
+      date: new Date().toLocaleDateString(),
+      isMine: true
     };
 
     setMessages([newMsg, ...messages]);
     setGbName("");
     setGbRole("");
     setGbMessage("");
+  };
+
+  const handleDeleteMessage = (id: string) => {
+    setMessages(messages.filter(msg => msg.id !== id));
+  };
+
+  const handleStartEdit = (id: string, currentText: string) => {
+    setEditingId(id);
+    setEditText(currentText);
+  };
+
+  const handleSaveEdit = (id: string) => {
+    if (!editText.trim()) return;
+    setMessages(messages.map(msg => msg.id === id ? { ...msg, text: editText } : msg));
+    setEditingId(null);
+    setEditText("");
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditText("");
   };
 
   const toggleAudio = () => {
@@ -449,15 +474,47 @@ function App() {
                 </div>
               ) : (
                 <>
-                  {messages.slice(0, visibleMessages).map((msg, idx) => (
-                    <div key={idx} className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 relative group hover:border-emerald-200 hover:shadow-md transition-all">
+                  {messages.slice(0, visibleMessages).map((msg) => (
+                    <div key={msg.id} className={`bg-white p-6 md:p-8 rounded-3xl shadow-sm border ${msg.isMine ? 'border-amber-200' : 'border-slate-100'} relative group hover:border-emerald-200 hover:shadow-md transition-all`}>
                       <div className="absolute top-0 right-0 p-4 text-emerald-50">
                         <MessageCircle size={40} className="opacity-50 group-hover:text-emerald-100 transition-colors" />
                       </div>
                       <div className="absolute left-0 top-8 w-1 h-12 bg-emerald-200 rounded-r-md group-hover:bg-amber-400 transition-colors"></div>
-                      <p className="text-slate-700 font-light text-lg mb-6 leading-relaxed relative z-10">"{msg.text}"</p>
+
+                      {editingId === msg.id ? (
+                        <div className="relative z-10 mb-6">
+                          <textarea
+                            value={editText}
+                            onChange={(e) => setEditText(e.target.value)}
+                            className="w-full bg-slate-50 border border-amber-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all resize-none font-light min-h-[100px]"
+                          />
+                          <div className="flex gap-2 mt-3 justify-end">
+                            <button onClick={handleCancelEdit} className="px-4 py-2 text-sm text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors flex items-center gap-1">
+                              <X size={14} /> Cancel
+                            </button>
+                            <button onClick={() => handleSaveEdit(msg.id)} disabled={!editText.trim()} className="px-4 py-2 text-sm bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors shadow-sm disabled:opacity-50 flex items-center gap-1">
+                              <Check size={14} /> Save
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-slate-700 font-light text-lg mb-6 leading-relaxed relative z-10">"{msg.text}"</p>
+                      )}
+
                       <div className="flex justify-between items-center text-sm border-t border-slate-100 pt-4 relative z-10 flex-wrap gap-2">
-                        <span className="font-bold text-emerald-900 text-base">{msg.name}</span>
+                        <div className="flex items-center gap-3">
+                          <span className="font-bold text-emerald-900 text-base">{msg.name} {msg.isMine && <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full ml-1 font-normal tracking-wide">You</span>}</span>
+                          {msg.isMine && editingId !== msg.id && (
+                            <div className="flex gap-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <button onClick={() => handleStartEdit(msg.id, msg.text)} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors" aria-label="Edit message" title="Edit your message">
+                                <Edit2 size={14} />
+                              </button>
+                              <button onClick={() => handleDeleteMessage(msg.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" aria-label="Delete message" title="Delete your message">
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          )}
+                        </div>
                         <div className="flex gap-2 items-center">
                           <span className="text-slate-400 text-xs">{msg.date}</span>
                           <span className="text-amber-700 bg-amber-100/50 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase">{msg.role}</span>
