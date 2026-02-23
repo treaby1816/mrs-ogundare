@@ -1,11 +1,10 @@
-const Jimp = require('jimp');
+import Jimp from 'jimp';
 
 async function removeBg() {
     try {
         const image = await Jimp.read('public/ondo-logo.jpg');
         console.log('Image loaded, scanning pixels...');
 
-        // Convert near-white background pixels to transparent
         image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {
             var red = this.bitmap.data[idx + 0];
             var green = this.bitmap.data[idx + 1];
