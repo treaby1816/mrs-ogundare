@@ -84,6 +84,14 @@ function App() {
           animate="visible"
           variants={staggerContainer}
         >
+          {/* Ondo State Logo - Top Left */}
+          <motion.img
+            variants={fadeIn}
+            src="/ondo-logo.jpg"
+            alt="Ondo State Logo"
+            className="absolute -top-4 md:-top-8 left-0 md:-left-12 w-20 md:w-28 opacity-90 drop-shadow-lg z-20 mix-blend-multiply"
+          />
+
           <motion.div variants={fadeIn} className="mb-8 relative">
             <div className="w-48 h-48 md:w-56 md:h-56 rounded-full border-4 border-amber-500/30 p-2 shadow-2xl shadow-emerald-950/50 relative overflow-hidden group">
               {/* Decorative Ring */}
