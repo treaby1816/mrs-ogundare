@@ -25,7 +25,7 @@ export const mdas = [
   "Office of Establishments and Training", "Ministry of Health",
   "Public Private Partnership Agency (Pioneer DFA)", "Cabinet and Special Services Department",
   "Ministry of Community Development and Cooperative Services", "Ondo State Agribusiness Empowerment Centre",
-  "Teaching Service Commission"
+  "Teaching Service Commission", "Ondo State Signage and Advertisement Agency"
 ];
 
 export const trainings = [

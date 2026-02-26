@@ -176,7 +176,7 @@ function App() {
 
           <motion.div variants={fadeIn} className="prose prose-lg md:prose-xl mx-auto text-slate-700 leading-relaxed font-light">
             <p className="first-letter:text-7xl first-letter:font-bold first-letter:text-emerald-900 first-letter:mr-3 first-letter:float-left first-letter:font-serif">
-              Born on January 26, 1974, to the family of Mr. & Mrs. Oluwaseun-Apo, Mrs. Tayo Ogundare hails from Idoani in Ose Local Government Area of Ondo State. A very likeable person and an Administrator par excellence, she is a devout Christian, happily married, and blessed with children.
+              Born on January 26, 1974, to the family of Mr. & Mrs. Oluwaseun-Apo, Mrs. Tayo Ogundare hails from Idoani in Ose Local Government Area of Ondo State. A very likeable person and an Administrator par excellence, she is a devout Christian, happily married, and blessed with children. She is a Fellow of the Chartered Institute of Public Administration of Nigeria (CIPAN).
             </p>
           </motion.div>
         </motion.div>
@@ -294,7 +294,7 @@ function App() {
                   "Office of Establishments and Training", "Ministry of Health",
                   "Public Private Partnership Agency (Pioneer DFA)", "Cabinet and Special Services Department",
                   "Ministry of Community Development and Cooperative Services", "Ondo State Agribusiness Empowerment Centre",
-                  "Teaching Service Commission"
+                  "Teaching Service Commission", "Ondo State Signage and Advertisement Agency"
                 ].map((mda, i) => (
                   <span key={i} className="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-medium text-slate-700 shadow-sm">
                     {mda}
@@ -371,9 +371,9 @@ function App() {
         >
           <motion.div variants={fadeIn} className="text-center mb-16 relative z-10">
             <span className="text-amber-600 font-semibold tracking-widest uppercase text-sm mb-2 block">Cherished Memories</span>
-            <h3 className="text-3xl md:text-5xl font-serif font-bold text-emerald-900 mb-6">Celebrant & Family</h3>
+            <h3 className="text-3xl md:text-5xl font-serif font-bold text-emerald-900 mb-6">The Celebrant</h3>
             <p className="max-w-2xl mx-auto text-lg text-slate-600 font-light">
-              A collection of beautiful moments shared with loved ones.
+              A collection of beautiful moments capturing the celebrant.
             </p>
           </motion.div>
 
@@ -386,13 +386,24 @@ function App() {
             <div className="flex w-[200%] animate-scroll gap-6 px-3">
               {/* Duplicate the array to create the infinite loop effect seamlessly. 
                   (6 items x 2 = 12 items scrolling continuously) */}
-              {[1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6].map((item, idx) => (
-                <div key={idx} className="w-64 md:w-80 shrink-0 aspect-[4/5] bg-white rounded-3xl border border-slate-200 flex flex-col items-center justify-center p-6 text-center group hover:bg-emerald-50 hover:border-emerald-300 transition-all cursor-pointer overflow-hidden relative shadow-md hover:shadow-xl hover:-translate-y-2">
-                  <div className="absolute inset-0 bg-emerald-900/0 group-hover:bg-emerald-900/5 transition-colors z-0"></div>
-                  <Heart className="w-12 h-12 text-emerald-300 mb-4 group-hover:text-amber-400 group-hover:scale-110 transition-transform duration-500 relative z-10" />
-                  <p className="text-emerald-800/80 font-bold font-serif text-lg relative z-10">Photo {item}</p>
-                  <p className="text-sm text-slate-500 mt-3 relative z-10 leading-relaxed px-4 opacity-70 group-hover:opacity-100 transition-opacity">Placeholder for celebrant and family photo</p>
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-300 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"></div>
+              {[
+                { src: "/ps1.jpg", caption: "Portrait 1" },
+                { src: "/ps2.jpg", caption: "Portrait 2" },
+                { src: "/ps3.jpg", caption: "Portrait 3" },
+                { src: "/ps4.jpg", caption: "Portrait 4" },
+                { src: "/ps5.jpg", caption: "Portrait 5" },
+                { src: "/ps.jpg", caption: "Portrait 6" },
+                { src: "/ps1.jpg", caption: "Portrait 1" },
+                { src: "/ps2.jpg", caption: "Portrait 2" },
+                { src: "/ps3.jpg", caption: "Portrait 3" },
+                { src: "/ps4.jpg", caption: "Portrait 4" },
+                { src: "/ps5.jpg", caption: "Portrait 5" },
+                { src: "/ps.jpg", caption: "Portrait 6" },
+              ].map((photo, idx) => (
+                <div key={idx} className="w-64 md:w-80 shrink-0 aspect-[4/5] bg-white rounded-3xl border border-slate-200 flex flex-col items-center justify-center text-center group hover:border-emerald-300 transition-all cursor-pointer overflow-hidden relative shadow-md hover:shadow-xl hover:-translate-y-2">
+                  <img src={photo.src} alt={photo.caption} className="absolute inset-0 w-full h-full object-cover object-top z-0 group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-300 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center z-20"></div>
                 </div>
               ))}
             </div>
